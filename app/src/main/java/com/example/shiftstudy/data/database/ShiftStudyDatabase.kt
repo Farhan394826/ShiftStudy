@@ -11,7 +11,7 @@ import com.example.shiftstudy.data.entity.User
 
 @Database(
     entities = [User::class, Task::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class ShiftStudyDatabase : RoomDatabase() {
@@ -28,7 +28,9 @@ abstract class ShiftStudyDatabase : RoomDatabase() {
                     context.applicationContext,
                     ShiftStudyDatabase::class.java,
                     "shiftstudy_database"
-                ).build()
+                )
+                .fallbackToDestructiveMigration()
+                .build()
                 INSTANCE = instance
                 instance
             }
