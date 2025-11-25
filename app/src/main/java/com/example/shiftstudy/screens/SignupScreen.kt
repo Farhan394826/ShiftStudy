@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.shiftstudy.ui.components.ShiftStudyLogoAlt
 import com.example.shiftstudy.viewmodel.AuthState
 import com.example.shiftstudy.viewmodel.AuthViewModel
 
@@ -120,20 +121,7 @@ fun SignupScreen(
             modifier = Modifier.padding(vertical = 12.dp)
         ) {
             // Logo Container
-            Box(
-                modifier = Modifier
-                    .size(70.dp)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.2f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.School,
-                    contentDescription = "ShiftStudy Logo",
-                    tint = Color.White,
-                    modifier = Modifier.size(42.dp)
-                )
-            }
+            ShiftStudyLogoAlt(size = 70.dp)
 
             Spacer(modifier = Modifier.height(12.dp))
 
