@@ -92,19 +92,6 @@ The app includes comprehensive instrumented tests:
 
 Run tests with: `./gradlew connectedAndroidTest`
 
-## Installation
-
-1. Clone the repository:
-```bash
-   git clone https://github.com/yourusername/ShiftStudy.git
-```
-
-2. Open the project in Android Studio (Hedgehog or later)
-
-3. Sync Gradle files
-
-4. Run on an emulator or physical device (API 24+)
-
 ## Requirements
 
 - **Minimum SDK**: API 24 (Android 7.0)
@@ -152,16 +139,11 @@ Run tests with: `./gradlew connectedAndroidTest`
 - Institution: James Cook University
 - Year: 2025
 
-## License
+## 📸 Screenshots
 
-This project was created as an academic assignment for CP3406.
+*All screenshots are available in the `/screenshots` folder.*
 
-## Acknowledgments
 
-- Quotable API for educational quotes
-- Material Design 3 for UI components
-- Android Jetpack libraries
-- Course instructors and teaching staff
 
 
 
