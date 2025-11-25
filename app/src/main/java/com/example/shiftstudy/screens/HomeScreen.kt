@@ -1,6 +1,7 @@
 package com.example.shiftstudy.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -370,6 +375,8 @@ fun StatCard(
 @Composable
 fun TaskCard(task: Task) {
     val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    var isExpanded by remember { mutableStateOf(false) }
+
     val priorityColor = when (task.priority) {
         "High" -> Color(0xFFE53935)
         "Medium" -> Color(0xFFFF9800)
@@ -378,76 +385,138 @@ fun TaskCard(task: Task) {
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { isExpanded = !isExpanded },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(if (isExpanded) 4.dp else 2.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
         ) {
-            // Priority Indicator
-            Surface(
-                shape = CircleShape,
-                color = priorityColor,
-                modifier = Modifier
-                    .size(8.dp)
-            ) {}
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Priority Indicator
+                Surface(
+                    shape = CircleShape,
+                    color = priorityColor,
+                    modifier = Modifier.size(8.dp)
+                ) {}
 
-            Spacer(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(8.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = task.title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF212121)
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = task.category,
-                        fontSize = 12.sp,
-                        color = Color(0xFF757575),
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Color(0xFFE3F2FD))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                        text = task.title,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF212121)
                     )
 
-                    val dateTimeText = if (task.dueTime != null) {
-                        "${dateFormat.format(Date(task.dueDate))} at ${task.dueTime}"
-                    } else {
-                        dateFormat.format(Date(task.dueDate))
-                    }
+                    Spacer(modifier = Modifier.height(4.dp))
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = task.category,
+                            fontSize = 12.sp,
+                            color = Color(0xFF757575),
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color(0xFFE3F2FD))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+
+                        val dateTimeText = if (task.dueTime != null) {
+                            "${dateFormat.format(Date(task.dueDate))} at ${task.dueTime}"
+                        } else {
+                            dateFormat.format(Date(task.dueDate))
+                        }
+
+                        Text(
+                            text = dateTimeText,
+                            fontSize = 12.sp,
+                            color = Color(0xFF757575)
+                        )
+                    }
+                }
+
+                // Priority Badge
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = priorityColor.copy(alpha = 0.1f)
+                ) {
                     Text(
-                        text = dateTimeText,
+                        text = task.priority,
                         fontSize = 12.sp,
-                        color = Color(0xFF757575)
+                        fontWeight = FontWeight.Medium,
+                        color = priorityColor,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
             }
 
-            // Status Badge
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = priorityColor.copy(alpha = 0.1f)
-            ) {
+            // Expandable Description Section
+            if (isExpanded && task.description.isNotBlank()) {
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Simple divider using Box
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color(0xFFE0E0E0))
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
                 Text(
-                    text = task.priority,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = priorityColor,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                    text = "Description:",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF757575)
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Text(
+                    text = task.description,
+                    fontSize = 14.sp,
+                    color = Color(0xFF424242),
+                    lineHeight = 20.sp
+                )
+            }
+
+            // Show hint to expand if collapsed and has description
+            if (!isExpanded && task.description.isNotBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Tap to see details ▼",
+                    fontSize = 11.sp,
+                    color = Color(0xFF9E9E9E),
+                    fontStyle = FontStyle.Italic
+                )
+            }
+
+            // Show hint to collapse if expanded
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Tap to collapse ▲",
+                    fontSize = 11.sp,
+                    color = Color(0xFF9E9E9E),
+                    fontStyle = FontStyle.Italic,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End
                 )
             }
         }
