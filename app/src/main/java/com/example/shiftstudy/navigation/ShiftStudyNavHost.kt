@@ -10,6 +10,7 @@ import com.example.shiftstudy.screens.AddTaskScreen
 import com.example.shiftstudy.screens.HomeScreen
 import com.example.shiftstudy.screens.LoginScreen
 import com.example.shiftstudy.screens.ScheduleScreen
+import com.example.shiftstudy.screens.SettingsScreen
 import com.example.shiftstudy.screens.SignupScreen
 import com.example.shiftstudy.screens.TasksScreen
 import com.example.shiftstudy.viewmodel.AuthViewModel
@@ -47,6 +48,9 @@ fun ShiftStudyNavHost(
         }
         composable("addTask") {
             AddTaskScreen(navController, authViewModel, taskViewModel)
+        }
+        composable(BottomNavItem.Settings.route) {
+            SettingsScreen(navController, authViewModel)
         }
     }
 }

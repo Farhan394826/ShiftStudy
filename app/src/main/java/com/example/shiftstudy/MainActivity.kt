@@ -43,7 +43,8 @@ fun ShiftStudyApp() {
     val mainRoutes = setOf(
         BottomNavItem.Home.route,
         BottomNavItem.Schedule.route,
-        BottomNavItem.Tasks.route
+        BottomNavItem.Tasks.route,
+        BottomNavItem.Settings.route
     )
     val showChrome = currentRoute in mainRoutes
 

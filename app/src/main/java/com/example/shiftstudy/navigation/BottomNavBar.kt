@@ -16,7 +16,8 @@ fun BottomNavBar(navController: NavHostController) {
     val items: List<BottomNavItem> = listOf(
         BottomNavItem.Home,
         BottomNavItem.Schedule,
-        BottomNavItem.Tasks
+        BottomNavItem.Tasks,
+        BottomNavItem.Settings
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
